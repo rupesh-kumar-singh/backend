@@ -2,7 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const data = require("../models/data");
 
-router.post("/getdata", async (req, res) => {
+router.post("/students", async (req, res) => {
   try {
     const user = new data(req.body);
     const datass = await user.save();
@@ -13,7 +13,7 @@ router.post("/getdata", async (req, res) => {
   }
 });
 
-router.get("/getdata", async (req, res) => {
+router.get("/students", async (req, res) => {
   try {
     const user = await data.find();
 
@@ -22,7 +22,19 @@ router.get("/getdata", async (req, res) => {
     res.status(400).send(e);
   }
 });
-router.put("/getdata/:id", async (req, res) => {
+
+router.get("/students/:id", async (req, res) => {
+  try {
+    const user = req.params.id;
+    const otpt = await data.findById({ _id: user });
+
+    res.status(200).send(otpt);
+  } catch (e) {
+    res.status(200).send(e);
+  }
+});
+
+router.put("/students/:id", async (req, res) => {
   const updateddata = await data.updateOne(
     { _id: req.params.id },
     { $set: req.body }
@@ -30,7 +42,7 @@ router.put("/getdata/:id", async (req, res) => {
   res.send(updateddata);
 });
 
-router.delete("/getdata/:id", async (req, res) => {
+router.delete("/students/:id", async (req, res) => {
   const deletedata = await data.deleteOne({ _id: req.params.id });
   res.send(deletedata);
 });
